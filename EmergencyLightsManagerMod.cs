@@ -32,9 +32,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace EmergencyLightsManager
+namespace EmergencyLightsManagerV2
 {
-	public class EmergencyLightsManagerMod : ILoadingExtension, IUserMod
+	public class EmergencyLightsManagerV2 : ILoadingExtension, IUserMod
 	{
 		private enum Service
 		{
@@ -69,7 +69,7 @@ namespace EmergencyLightsManager
             SnowPlowRight
 		}
 
-		private const string CONFIG_PATH = "EmergencyLightsManager.txt";
+		private const string CONFIG_PATH = "EmergencyLightsManagerV2.txt";
 
 		private static Dictionary<string, Color> Colors = new Dictionary<string, Color>
 		{
@@ -109,7 +109,7 @@ namespace EmergencyLightsManager
 
 		private string[] ColorNames = Colors.Keys.ToArray();
 
-		private static string[] EmergencyLightPresets = new string[6]
+		private static string[] EmergencyLightPresets = new string[7]
 		{
 			"Default",
 			"Custom",
@@ -206,7 +206,7 @@ namespace EmergencyLightsManager
 
 		private UIDropDown ddAmbulanceRightRear;
 
-		public string Name => "Emergency Lights Manager";
+		public string Name => "Emergency Lights Manager V2";
 
 		public string Description => "Change colors of emergency vehicle lights and rotary lights - full customization.";
 
@@ -272,7 +272,6 @@ namespace EmergencyLightsManager
 						catch
 						{
 							continue;
-							IL_00da:;
 						}
 						settings[key] = array3[1];
 					}
@@ -525,25 +524,18 @@ namespace EmergencyLightsManager
 				}
 			});
 			RearAmbulanceVisibility(Convert.ToBoolean(settings[Setting.ManualRearAmbulance]));
-			strip.selectedIndex = -1;
-			strip.selectedIndex = 0;
-			int selectedIndex = uIDropDown.selectedIndex;
-			uIDropDown.selectedIndex = -1;
-			uIDropDown.selectedIndex = selectedIndex;
-		
             
-            
-            UIButton uIButton2 = strip.AddTab("Rotary (e.g. Snow Plow)", uIButton, fillText: true);
+            uIButton2 = strip.AddTab("Rotary (e.g. Snow Plow)", uIButton, fillText: true);
 			uIButton2.textColor = uIButton.textColor;
 			uIButton2.pressedTextColor = uIButton.pressedTextColor;
 			uIButton2.hoveredTextColor = uIButton.hoveredTextColor;
 			uIButton2.focusedTextColor = uIButton.hoveredTextColor;
 			uIButton2.disabledTextColor = uIButton.hoveredTextColor;
-			UIPanel uIPanel = strip.tabContainer.components[0] as UIPanel;
+			uIPanel = strip.tabContainer.components[3] as UIPanel;
 			uIPanel.autoLayout = true;
 			uIPanel.wrapLayout = true;
 			uIPanel.autoLayoutDirection = LayoutDirection.Horizontal;
-			UIHelper uIHelper = new UIHelper(uIPanel);
+			uIHelper = new UIHelper(uIPanel);
 			uIHelper.AddSpace(15);
 			uIHelper.AddDropdown("Left", ColorNames, Array.IndexOf(ColorNames, settings[Setting.SnowPlowLeft]), delegate(int sel)
 			{
@@ -563,8 +555,14 @@ namespace EmergencyLightsManager
 					Apply();
 				}
 			});
-    
-        }
+
+			strip.selectedIndex = -1;
+			strip.selectedIndex = 0;
+			int selectedIndex = uIDropDown.selectedIndex;
+			uIDropDown.selectedIndex = -1;
+			uIDropDown.selectedIndex = selectedIndex;
+
+		}
 
 		private void Apply()
 		{
